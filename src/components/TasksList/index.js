@@ -1,14 +1,16 @@
 import React     from 'react';
 import PropTypes from 'prop-types';
+import withData from '../HOC/withData';
+import {getUserTasks} from '../../api/taskController';
 
 function TasksList (props) {
 
-  const { tasks, isFetching } = props;
+  const { items, isFetching } = props;
 
   return (
     <ol>
       {
-        tasks.map( item => (<li key={item.id}>{item.value}</li>) )
+        items.map( item => (<li key={item.id}>{item.value}</li>) )
       }
       {
         isFetching && <li>Loading...</li>
@@ -18,7 +20,7 @@ function TasksList (props) {
 }
 
 TasksList.propTypes = {
-  tasks: PropTypes.arrayOf( PropTypes.shape( {
+  items: PropTypes.arrayOf( PropTypes.shape( {
                                                id: PropTypes.oneOfType(
                                                  [PropTypes.string, PropTypes.number] ).isRequired,
                                                value: PropTypes.string.isRequired,
@@ -28,8 +30,5 @@ TasksList.propTypes = {
                                              } ) ).isRequired
 };
 
-TasksList.defaultProps = {
-  tasks: [],
-};
 
-export default TasksList;
+export default withData(getUserTasks, TasksList);
